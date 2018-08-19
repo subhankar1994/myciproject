@@ -6,9 +6,7 @@ class AdminController extends REST_Controller{
 
 	function __construct()
 	{
-        // Construct the parent class
 		parent::__construct();
-		//$this->load->library('form_validation');
 		$this->load->helper('utility_helper');
 		$this->load->model('Admin_model');
 		$this->load->model('Util');
@@ -90,6 +88,34 @@ class AdminController extends REST_Controller{
 	  	}else{
 	  		$this->redirect_login();
 	  	}
+	}
+
+	//====================Admin Users=======================
+
+	public function users_get(){
+		if($this->Util->loginValidate()){
+			$data['title'] = 'Users';
+			$data['description'] = 'Users';
+			$data['keyword'] = 'Users';
+			$data['main_content'] = 'admin/pages/users';
+			return $this->load->view('admin_template', $data);
+	  	}else{
+	  		$this->redirect_login();
+	  	}
+
+	}
+
+	public function add_user_get(){
+		if($this->Util->loginValidate()){
+			$data['title'] = 'Add User';
+			$data['description'] = 'Add User';
+			$data['keyword'] = 'Add User';
+			$data['main_content'] = 'admin/pages/add_user';
+			return $this->load->view('admin_template', $data);
+	  	}else{
+	  		$this->redirect_login();
+	  	}
+
 	}
 
 }

@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin_model extends CI_Model{
+
+	//=======================Login=============================
+
 	function login_verify($data)
 	{
 		$this->db->select('COUNT(*) AS counter , id');
@@ -31,6 +34,8 @@ class Admin_model extends CI_Model{
 		$this->session->set_userdata($data);
 	}
 
+	//=======================Admin User==========================
+
 	function get_users($dataId = '' , $conditions = array(), $page_no = 1 , $limit = ADMIN_PAGE_LIMIT , $select = '*'){
 		$start = 0;
 		if($page_no == ''){
@@ -40,7 +45,6 @@ class Admin_model extends CI_Model{
 			if($page_no == 0){
 				$page_no = 1;
 			}
-
 			$start = ($page_no - 1) * $limit;
 		}
 		$this->db->select($select);
@@ -55,7 +59,6 @@ class Admin_model extends CI_Model{
 			$this->db->limit($limit , $start);
 		}
 		$query = $this->db->get();
-        // echo $this->db->last_query();
 		$result = $query->result();
 		return $result;
 	}

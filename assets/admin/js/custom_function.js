@@ -6,7 +6,7 @@ var global =
 };
 
 $(document).ready(function(){
-	var LoginAjx;
+	var LoginAjx, AdminAjx;
 	var remember = $.cookie('remember');
     if ( remember == 'true' ) {
         var u_name = $.cookie('u_name');
@@ -90,12 +90,53 @@ $(document).ready(function(){
 
                     }
 				});
+			},
+			create_user: function(e){
+				e.preventDefault();
+	            if(AdminAjx){
+	                AdminAjx.abort();
+	            }
+	            var errLocation = [];
+	            var uname = $('#uname');
+	            var f_name = $('#f_name');
+	            var l_name = $('#l_name');
+	            var email = $('#email');
+	            var password = $('#password');
+	            var c_password = $('#c_password');
+	            var phone = $('#phone');
+	            var uname_val = $.trim(uname.val());
+	            var f_name_val = $.trim(f_name.val());
+	            var l_name_val = $.trim(l_name.val());
+	            var email_val = $.trim(email.val());
+	            var password_val = $.trim(password.val());
+	            var c_password_val = $.trim(c_password.val());
+	            var phone_val = $.trim(phone.val());
+	            $(".errors").hide().remove();
+                var hasError = false;
+                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                if(uname_val == ''){
+	            	uname.after('<div class="errors">You forgot to enter username.</div>');
+	                errLocation.push('uname');
+                }
+                if(f_name_val == ''){
+	            	f_name.after('<div class="errors">You forgot to enter first name.</div>');
+	                errLocation.push('f_name');
+                }
+                if(l_name_val == ''){
+	            	l_name.after('<div class="errors">You forgot to enter last name.</div>');
+	                errLocation.push('l_name');
+                }
+
+
 			}
 		}
 	};
 
 	$(document).delegate("#login_btn",'click',function(e){
         admin.fn.login(e);
+    });
+    $(document).delegate("#user_submit_btn",'click',function(e){
+        admin.fn.create_user(e);
     });
 
 });
