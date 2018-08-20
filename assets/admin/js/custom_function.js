@@ -126,6 +126,7 @@ $(document).ready(function(){
 	            	l_name.after('<div class="errors">You forgot to enter last name.</div>');
 	                errLocation.push('l_name');
                 }
+                
 
 
 			}
