@@ -116,17 +116,121 @@ $(document).ready(function(){
                 var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
                 if(uname_val == ''){
 	            	uname.after('<div class="errors">You forgot to enter username.</div>');
+	            	hasError = true; 
 	                errLocation.push('uname');
                 }
                 if(f_name_val == ''){
 	            	f_name.after('<div class="errors">You forgot to enter first name.</div>');
+	            	hasError = true; 
 	                errLocation.push('f_name');
                 }
                 if(l_name_val == ''){
 	            	l_name.after('<div class="errors">You forgot to enter last name.</div>');
+	            	hasError = true; 
 	                errLocation.push('l_name');
                 }
-                
+
+                if(password_val == '') {
+                    password.after('<div class="errors">You forgot to enter password.</div>');
+                    hasError = true; 
+                    errLocation.push('password');
+                }
+                if(password_val != c_password_val) {
+                    c_password.after('<div class="errors">password mismatch.</div>');
+                    hasError = true; 
+                    errLocation.push('password');
+                }
+
+                if(email_val == '') {
+                    email.after('<div class="errors">You forgot to enter your email.</div>');
+                    hasError = true; 
+                    errLocation.push('email');
+                } else if(!emailReg.test(email_val)) {
+                    email.after('<div class="errors">Please enter a valid email.</div>');
+                    hasError = true; 
+                    errLocation.push('email');
+                }
+                if(phone_val == '') {
+                    phone.after('<div class="errors">You forgot to enter Phone number.</div>');
+                    hasError = true; 
+                    errLocation.push('phone');
+                    $('.verification-status-phone').hide();
+                } else if(isNaN(phone_val)) {
+                    phone.after('<div class="errors">Please enter a valid Phone number.</div>');
+                    hasError = true; 
+                    errLocation.push('phone');
+                    $('.verification-status-phone').hide();
+                }else if(phone_val.length < 10) {
+                    phone.after('<div class="errors">Please enter a valid Phone number.</div>');
+                    hasError = true; 
+                    errLocation.push('phone');
+                    $('.verification-status-phone').hide();
+                }
+                if(hasError){
+                    console.log(errLocation);
+                    $('html, body').stop().animate({
+                        scrollTop: ($('.errors:first').offset().top - 50)
+                    }, 300);
+                }
+                if(hasError == false) {
+                	var data_get= {
+                        u_name : uname_val,
+                        f_name : f_name_val ,
+                        l_name : l_name_val,
+                        email : email_val,
+                        password : password_val,
+                        phone : phone_val
+                    };
+                    if($("#user_id").length > 0){
+                        var user_id = $("#user_id");
+                        var user_idVal = $.trim(user_id.val());
+                        data_get["user_id"] = user_idVal;
+                        if(password_val != ''){
+                            data_get["password"] = password_val;
+                        }
+                    }else{
+                        data_get["password"] = password_val;
+                    }
+                    AdminAjx = $.ajax({
+                    url: global.base_url+"admin/save_user",
+                    type: "post",
+                    data: data_get,
+                    dataType: 'json',
+                    success: function(data ){
+                        $(".error").hide().remove();
+                        if(data.status == false){
+                            if(data.error.u_name != '') {
+                                uname.after('<div class="errors">'+data.error.u_name+'.</div>');
+                                uname.focus();
+                                hasError = true; 
+                                errLocation.push('uname');
+                            }
+
+                            if(data.error.email != '') {
+                                email.after('<div class="errors">'+data.error.email+'.</div>');
+                                email.focus();
+                                hasError = true; 
+                                errLocation.push('email');
+                            }
+
+                            if(data.error.phone != '') {
+                                phone.after('<div class="errors">'+data.error.phone+'.</div>');
+                                phone.focus();
+                                hasError = true; 
+                                errLocation.push('phone');
+                            }
+
+                        }else{
+                            window.location = global.base_url+'admin/users';
+                        }
+                    },
+                    error: function( error )
+                    {
+                        //console.log(error);
+                    }
+                });
+
+                }
 
 
 			}

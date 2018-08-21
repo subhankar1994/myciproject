@@ -25,5 +25,5 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="<?php echo admin_jsUrl('custom_function.js'); ?>"></script>
 <script type="text/javascript">
-	 $('#example1').DataTable();
+	 $('#admin_table').DataTable();
 </script>

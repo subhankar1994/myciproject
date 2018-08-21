@@ -36,17 +36,7 @@ class Admin_model extends CI_Model{
 
 	//=======================Admin User==========================
 
-	function get_users($dataId = '' , $conditions = array(), $page_no = 1 , $limit = ADMIN_PAGE_LIMIT , $select = '*'){
-		$start = 0;
-		if($page_no == ''){
-			$page_no = '*';
-		}
-		if($page_no !='*'){
-			if($page_no == 0){
-				$page_no = 1;
-			}
-			$start = ($page_no - 1) * $limit;
-		}
+	function get_users($dataId = '' , $conditions = array() , $select = '*'){
 		$this->db->select($select);
 		$this->db->from('admin_users AU');
 		if($dataId != ''){
@@ -55,13 +45,31 @@ class Admin_model extends CI_Model{
 		if(count($conditions) > 0){
 			$this->db->where($conditions);
 		}
-		if($limit != 0){
-			$this->db->limit($limit , $start);
-		}
 		$query = $this->db->get();
 		$result = $query->result();
 		return $result;
 	}
+
+	function user_add($data){
+        $this->db->insert('admin_users', $data);
+        $id = $this->db->insert_id();
+        return $id;
+    }
+
+    function user_update($user_id , $data){
+        $this->db->where('id', $user_id);
+        $this->db->update('admin_users', $data);
+    }
+	function get_user_existance($u_id , $u_name){
+        $this->db->select('COUNT(*) AS counter');
+        $this->db->from('admin_users');
+        $this->db->where('id !=', $u_id);
+        $this->db->where("( uname = '$u_name' OR email = '$u_name')", NULL , FALSE);
+        $this->db->group_by('id');
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;
+    }
 
 }
 ?>
